@@ -23,7 +23,7 @@ class Circle extends React.Component {
   }
   componentDidMount() {
     setTimeout(() => {
-      this.setState({ opacity: 0.3 });
+      this.setState({ opacity: 0.7 });
     }, 0);
   }
   render() {
