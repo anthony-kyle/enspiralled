@@ -9,4 +9,5 @@ body {
 
 circle {
   opacity: 0.3;
+  transition: opacity 1s;
 }
