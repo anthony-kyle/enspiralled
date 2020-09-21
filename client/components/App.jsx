@@ -17,7 +17,6 @@ class App extends React.Component {
   }
 
   handleOver = (e) => {
-    console.log(e)
     if (!e.state.parent) {
       this.makeChildren(e);
     }
@@ -66,7 +65,6 @@ class App extends React.Component {
           } 
         ]
       },
-      console.log(c)
     );
   };
 
