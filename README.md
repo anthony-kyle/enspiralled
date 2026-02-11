@@ -1,90 +1,73 @@
-# Enspiraled
+# React + TypeScript + Vite
 
-For this challenge, you'll be making a basic fractal generator that starts with a single large circle. As your mouse moves over the circle, four more circles appear. And each circle behaves this way.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Setup
+Currently, two official plugins are available:
 
-After cloning this repo
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-```sh
-npm install
-npm run dev
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-and then go to [`http://localhost:3000`](http://localhost:3000).
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-This is what your starting place looks like:
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-![Base case](./public/images/base-circle.png)
-
-And after you've completed this project, this is what it can look like after a few mouse overs:
-
-![Enspiraled](./public/images/enspiral.png)
-
-
-## Your starting place
-
-Our journey begins in `client/components/App.jsx`. Here are its contents:
-
-```jsx
-import React from 'react'
-
-const App = props => {
-  const circle = {
-    cx: props.width / 2,
-    cy: props.height / 2,
-    level: 0,
-    r: 256
-  }
-
-  return (
-    <svg width={props.width} height={props.height}>
-      <circle cx={circle.cx} cy={circle.cy} r={circle.r} />
-    </svg>
-  )
-}
-
-export default App
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-The `App` component is implemented as a stateless functional component. The `props` are defined in `client/index.js` if you're curious. We use the width and height of the window to center the circle in the browser. This component renders [Scalable Vector Graphics](https://developer.mozilla.org/en-US/docs/Web/SVG): an `<svg>` element with an SVG `<circle>` element in it. It has a radius of 256px (`r`) and is filled with a translucent grey established in `public/css/app.css`. It's important to note that this JSX will render The SVG elements, _not React controls_. We know this because `<svg>` and `<circle>` are lower case.
-
-
-## The requirements
-
-* As your mouse moves over the circle, four more circles should appear at the cardinal compass points: north, south, east and west.
-
-* The radius of the 4 new circles should be half of the _parent_ circle.
-
-* A circle should only create 4 new _children_ **once**. Subsequent mouseovers should create no visible change.
-
-
-## Some things to consider
-
-Because every circle behaves the same way, you could create a new `Circle` component in `client/components/Circle.jsx` that wraps the SVG `<circle>` element and adds some new features (like state).
-
-When a `<Circle>` is showing itself, it should use the SVG `<circle>` element, but when it's showing it's children, it should use new `<Circle>` components.
-
-The `<Circle>` component should keep its child circles as an array in state. It will only have children if it has been moused over.
-
-You can apply a mouseover event to the SVG `circle` element like so: `<circle cx={cx} cy={cy} r={r} mouseover={handleMouseOver} />`. The `handleMouseOver` function can be defined in the same `Circle.jsx` file.
-
-Once you've got the functionality, have fun with new colours for each generation!
-
-## Resources
-
-If you don't already have it installed, you should install the React DevTools browser extension ([Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/) and [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)). This will add a tab in Developer Tools that will allow you to explore the [virtual DOM](http://tonyfreed.com/blog/what_is_virtual_dom) used by React.
-
-And some more:
-
-* [SVG](https://developer.mozilla.org/en/docs/Web/SVG)
-* [SVG `circle`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/circle)
-* [React Component](https://facebook.github.io/react/docs/reusable-components.html#es6-classes)
-* [React Component API](https://facebook.github.io/react/docs/component-api.html)
-* [How State Works](https://facebook.github.io/react/docs/interactivity-and-dynamic-uis.html#how-state-works)
-* [React's `setState`](https://facebook.github.io/react/docs/component-api.html#setstate)
-* [React Event Handling](https://facebook.github.io/react/docs/interactivity-and-dynamic-uis.html#a-simple-example)
-* [`ReactDOM.render`](https://facebook.github.io/react/docs/top-level-api.html#reactdom.render)
-* [Color](https://developer.mozilla.org/en/docs/Web/CSS/color_value)
-* [React TestUtils](https://facebook.github.io/react/docs/test-utils.html)
-
